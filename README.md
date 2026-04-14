@@ -1,6 +1,6 @@
 # LeslieSultani.com Design Library
 
-Live companion to the [Sultani Design System Figma file](https://www.figma.com/design/zxniWcF88D1f9o57nl1xjR).
+Live companion to the [LeslieSultani.com Design System Figma file](https://www.figma.com/design/zxniWcF88D1f9o57nl1xjR).
 
 This is the part of the design system that can't fit inside Figma — the
 motion, the hover states, the count-ups — rendered as running code. It
