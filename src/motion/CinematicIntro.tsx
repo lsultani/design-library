@@ -3,7 +3,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 const SENTENCE = "I design the human layer of complex systems";
 
-/*
+type Phase = "cursor" | "typing" | "hold" | "spark" | "burst" | "done";
+
+export interface CinematicIntroProps {
+  /** Render as a transparent overlay inside a caller-owned stage. */
+  overlay?: boolean;
+  /** Bump this to re-run the storyboard from the outside. */
+  runKey?: number;
+}
+
+/**
  * CinematicIntro — full storyboard of the home-page intro.
  *
  * STORYBOARD
@@ -24,16 +33,6 @@ const SENTENCE = "I design the human layer of complex systems";
  *              background, no Replay. Use this when stacking the intro on
  *              top of ParticleField. The caller drives replay via `runKey`.
  */
-
-type Phase = "cursor" | "typing" | "hold" | "spark" | "burst" | "done";
-
-export interface CinematicIntroProps {
-  /** Render as a transparent overlay inside a caller-owned stage. */
-  overlay?: boolean;
-  /** Bump this to re-run the storyboard from the outside. */
-  runKey?: number;
-}
-
 export const CinematicIntro = ({
   overlay = false,
   runKey = 0,

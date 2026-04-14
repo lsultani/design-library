@@ -1,19 +1,6 @@
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-/*
- * PageTransition — simplified version of the production tile-grid
- * transition. In the main site each route change swaps one page for
- * another using a choreographed 8×6 grid of tiles. Here in the library
- * we strip the router and run the choreography in a loop: tiles
- * CLOSE (scale in) over the canvas, hold for a beat, then OPEN
- * (scale out) to reveal the "new" page.
- *
- * Each pattern stages the tiles differently — radial, mirror, wave,
- * scatter, staircase, diagonal — but they all drive the same per-tile
- * `--delay` CSS variable.
- */
-
 const COLS = 8;
 const ROWS = 6;
 const TOTAL = COLS * ROWS;
@@ -99,6 +86,18 @@ export interface PageTransitionProps {
   autoPlay?: boolean;
 }
 
+/**
+ * PageTransition — simplified version of the production tile-grid
+ * transition. In the main site each route change swaps one page for
+ * another using a choreographed 8×6 grid of tiles. Here in the library
+ * we strip the router and run the choreography in a loop: tiles
+ * CLOSE (scale in) over the canvas, hold for a beat, then OPEN
+ * (scale out) to reveal the "new" page.
+ *
+ * Each pattern stages the tiles differently — radial, mirror, wave,
+ * scatter, staircase, diagonal — but they all drive the same per-tile
+ * `--delay` CSS variable.
+ */
 export const PageTransition = ({
   pattern = "radial",
   tileColor = "hsl(var(--foreground))",

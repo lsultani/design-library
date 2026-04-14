@@ -1,27 +1,3 @@
-/**
- * ParticleField — the 3D shapes that fly out of the name on ignite.
- *
- * Ported from `/src/components/ParticleField.tsx`. The production site
- * mounts this as a fixed full-viewport canvas that listens for an
- * `intro-ignite` window event from `CinematicIntro` at the spark moment.
- * Here in the library the Canvas is sized to its parent (e.g. a 16:9
- * storybook stage) and an `autoIgnite` prop lets the story fire the
- * event on mount.
- *
- * Interactions
- * ------------
- *   - Move the pointer → parent rotates for parallax.
- *   - Click a shape    → it bumps away from the camera and emits sparks.
- *   - Click 3x within ~2s → it dissolves in a burst of particles and
- *                           respawns off-screen shortly after.
- *   - Shape-on-shape collisions → sparks, and ~8% of the time one of the
- *                                  colliding shapes dissolves instead.
- *
- * Shapes start at the origin hidden, wait for `intro-ignite`, then fly
- * outward on randomized spherical vectors and decelerate into an idle
- * drift. Edge color lerps from white (for the dark intro background)
- * to a per-layer gray over 2.2s — matching the CSS burst timing.
- */
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -627,6 +603,30 @@ export interface ParticleFieldProps {
   className?: string;
 }
 
+/**
+ * ParticleField — the 3D shapes that fly out of the name on ignite.
+ *
+ * Ported from `/src/components/ParticleField.tsx`. The production site
+ * mounts this as a fixed full-viewport canvas that listens for an
+ * `intro-ignite` window event from `CinematicIntro` at the spark moment.
+ * Here in the library the Canvas is sized to its parent (e.g. a 16:9
+ * storybook stage) and an `autoIgnite` prop lets the story fire the
+ * event on mount.
+ *
+ * Interactions
+ * ------------
+ *   - Move the pointer → parent rotates for parallax.
+ *   - Click a shape    → it bumps away from the camera and emits sparks.
+ *   - Click 3x within ~2s → it dissolves in a burst of particles and
+ *                           respawns off-screen shortly after.
+ *   - Shape-on-shape collisions → sparks, and ~8% of the time one of the
+ *                                  colliding shapes dissolves instead.
+ *
+ * Shapes start at the origin hidden, wait for `intro-ignite`, then fly
+ * outward on randomized spherical vectors and decelerate into an idle
+ * drift. Edge color lerps from white (for the dark intro background)
+ * to a per-layer gray over 2.2s — matching the CSS burst timing.
+ */
 export const ParticleField = ({
   introComplete = false,
   autoIgnite = false,

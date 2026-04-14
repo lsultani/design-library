@@ -1,23 +1,3 @@
-/**
- * CardGeometry — canvas-based Swiss-style wireframe animations.
- *
- * Each `id` maps to a different geometric animation used on the work
- * cards in the main site. Ported from `/src/components/CardGeometry.tsx`
- * unchanged so readers can inspect the same drawing code running here
- * in the library.
- *
- * Swiss/International Typographic Style — wireframe, minimal, elegant.
- * Uses `requestAnimationFrame` + a `ResizeObserver` so the canvas stays
- * in sync with its container at any size.
- *
- * Variants
- * --------
- *   robotics       → orbiting agents around a hub
- *   digital-twin   → mirrored structure with sync pulses
- *   5g-strategy    → flowing horizontal wave lines
- *   en-verite      → 4-layer neural network with traveling pulses
- *   gaming         → isometric grid of rising and falling blocks
- */
 import { useCallback, useEffect, useRef } from "react";
 
 type DrawFn = (
@@ -541,6 +521,26 @@ export interface CardGeometryProps {
   className?: string;
 }
 
+/**
+ * CardGeometry — canvas-based Swiss-style wireframe animations.
+ *
+ * Each `id` maps to a different geometric animation used on the work
+ * cards in the main site. Ported from `/src/components/CardGeometry.tsx`
+ * unchanged so readers can inspect the same drawing code running here
+ * in the library.
+ *
+ * Swiss/International Typographic Style — wireframe, minimal, elegant.
+ * Uses `requestAnimationFrame` + a `ResizeObserver` so the canvas stays
+ * in sync with its container at any size.
+ *
+ * Variants
+ * --------
+ *   robotics       → orbiting agents around a hub
+ *   digital-twin   → mirrored structure with sync pulses
+ *   5g-strategy    → flowing horizontal wave lines
+ *   en-verite      → 4-layer neural network with traveling pulses
+ *   gaming         → isometric grid of rising and falling blocks
+ */
 export const CardGeometry = ({ id, size = "card", className }: CardGeometryProps) => {
   const draw = geometryMap[id];
   if (!draw) return null;
