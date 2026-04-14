@@ -4,12 +4,12 @@ Live companion to the [LeslieSultani.com Design System Figma file](https://www.f
 
 This is the part of the design system that can't fit inside Figma — the
 motion, the hover states, the count-ups — rendered as running code. It
-exists so readers of the **AI Native Design** essays can see the three-layer
+exists so readers of the **AI Native Design** articles can see the three-layer
 architecture in practice:
 
 1. **Shape** — the Figma file
 2. **Motion & behavior** — this Storybook
-3. **Rules** — `../design-system-rules.md`
+3. **Rules** — `design-system-rules.md`
 
 ## Running it locally
 
@@ -67,4 +67,4 @@ backlog — add it.
 
 See [`Welcome/Rules (for AI and humans)`](http://localhost:6006/?path=/docs/welcome-rules-for-ai-and-humans--docs) inside Storybook,
 or read the source at `src/stories/welcome/Rules.mdx`. The full rules live at
-`../design-system-rules.md` at the repo root.
+`design-system-rules.md` at the repo root.
