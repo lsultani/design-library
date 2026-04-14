@@ -1,0 +1,46 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Tokens/Typography" />
+
+# Typography
+
+Two typefaces. One voice.
+
+**Space Grotesk** carries the site — headlines, body, and UI labels.
+Weight range is intentionally narrow (Light, Regular, Medium, Bold).
+**Space Mono** is used as a meta face: eyebrows, tags, nav chips,
+timeline dates, chart labels. Never body copy.
+
+## Type scale
+
+<Row size="clamp(3.5rem, 8vw, 7rem)" family="sans" weight="500" tracking="-0.03em" lh="1.0" label="hero" />
+<Row size="clamp(1.75rem, 3vw, 2.5rem)" family="sans" weight="500" tracking="-0.02em" lh="1.15" label="section" />
+<Row size="1.75rem" family="sans" weight="500" tracking="-0.015em" lh="1.3" label="h3" />
+<Row size="1.375rem" family="sans" weight="500" tracking="-0.015em" lh="1.3" label="h4 / card" />
+<Row size="1.125rem" family="sans" weight="300" tracking="normal" lh="1.7" label="body-lg" sample="The design system is the same for humans and AI. Until it isn't." />
+<Row size="1rem"  family="sans" weight="400" tracking="normal" lh="1.7" label="body-md" sample="Body copy carries the narrative. Keep it readable, not decorative." />
+<Row size="0.8125rem" family="sans" weight="400" tracking="normal" lh="1.5" label="small" />
+<Row size="0.75rem"  family="mono" weight="400" tracking="0.2em" lh="1.4" label="mono-label" upper />
+<Row size="0.625rem" family="mono" weight="400" tracking="0.25em" lh="1.4" label="mono-label-small" upper />
+
+## Rules
+
+- Headlines never use uppercase. Ever.
+- Mono is always uppercase with at least 0.15em tracking.
+- Don't add weights beyond Light/Regular/Medium/Bold for Space Grotesk.
+- Don't use italic except in pull quotes.
+
+export const Row = ({ size, family, weight, tracking, lh, label, sample, upper }) => (
+  <div style={{ display: "grid", gridTemplateColumns: "160px 1fr", gap: 24, padding: "20px 0", borderBottom: "1px solid hsl(0 0% 85%)" }}>
+    <div style={{ fontFamily: "Space Mono, monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.2em", color: "hsl(0 0% 45%)" }}>
+      {label}<br />{size}
+    </div>
+    <div style={{
+      fontFamily: family === "mono" ? "Space Mono, monospace" : "Space Grotesk, sans-serif",
+      fontSize: size, fontWeight: weight, letterSpacing: tracking, lineHeight: lh,
+      textTransform: upper ? "uppercase" : "none",
+    }}>
+      {sample ?? "The quick brown fox"}
+    </div>
+  </div>
+);

@@ -1,0 +1,57 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Welcome/Rules (for AI and humans)" />
+
+# Rules — for humans and AI agents
+
+These are the same rules that sit in [`design-system-rules.md`](https://github.com/lesliesultani) at the repo root.
+They're here so readers (and any AI agent browsing this library) can see them next to the live components.
+
+## Voice
+
+- Restraint is the brand. Gray, squared, narrow weight range.
+- Headlines never uppercase. Mono labels always uppercase.
+- No color accent. No decorative motion.
+
+## Tokens
+
+- **Color:** HSL triplets on `:root`, mapped through Tailwind semantic names (`foreground`, `background`, `muted`, etc.). Never hex.
+- **Radius:** `--radius: 0rem`. Cards override to `rounded-2xl`. Tags use `rounded-full`.
+- **Spacing:** 4px grid. Tailwind's default scale applies.
+- **Motion:** `motion-fast` 200ms, `motion-base` 400ms, `motion-slow` 800ms, `motion-scene` 2.2s. Only two curves: `ease-out-expo` for arrivals, `ease-standard` for neutrals.
+
+## Components
+
+- Button: primary / ghost / text. Never gradient. Never shadow.
+- Tag: mono, uppercase, wide-tracked. Never used for marketing emphasis.
+- WorkCard: 3:4 aspect, 3D tilt on hover, 4° max rotation.
+- ImpactMetric: mono label, sans-case value. Count-up on scroll (see Motion / CountUp).
+- SectionHeader: eyebrow (mono) → title (sans) → lead (muted, max 60ch).
+
+## Charts
+
+- Mono labels, 1px rules, no tick grid. Values are secondary; labels are primary.
+- One color: `--foreground`. Only exception: `--destructive` in system-error contexts.
+- If you need a second hue to communicate, the data needs sharpening first.
+
+## Motion
+
+- Use tokens. No hand-rolled durations.
+- Respect `prefers-reduced-motion`. Every animation in this library short-circuits when it's set.
+- Motion is vocabulary. If it doesn't say something, it's an apology.
+
+## For AI agents
+
+Before generating any visual for Leslie:
+
+1. Read the token layer. Use semantic names.
+2. Read the component vocabulary. Prefer existing components over inventing.
+3. Read the chart vocabulary. Prefer existing chart templates.
+4. If the ask falls outside the vocabulary, say so and propose an extension — don't silently invent.
+
+## Versioning
+
+- This library is the truth for motion and code behavior.
+- The Figma file is the truth for static shape.
+- The rules doc is the truth for intent and voice.
+- When they disagree, the conversation happens in text, not in the file.

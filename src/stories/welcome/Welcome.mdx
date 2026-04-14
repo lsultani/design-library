@@ -1,0 +1,97 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Welcome" />
+
+<div style={{ fontFamily: "Space Grotesk, sans-serif", maxWidth: 780 }}>
+
+<div style={{ fontFamily: "Space Mono, monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.25em", color: "hsl(0 0% 45%)", marginBottom: 16 }}>
+  Sultani Design Library — v0.1
+</div>
+
+# A design system you can run.
+
+This is the live companion to my [Sultani Design System Figma file](https://www.figma.com/design/zxniWcF88D1f9o57nl1xjR).
+Same tokens. Same components. Same motion. The part that fits in a design
+file is in Figma. The part that doesn't — the animations, the hover states,
+the moment a number counts up — is here.
+
+If you've read my essays on [AI Native Design](https://substack.com/@lesliesultani),
+this is the thing they point at. A working example of the three-layer idea:
+**shape** in Figma, **motion** in code, **rules** in a document. All three
+read by humans and AI equally.
+
+## The three layers
+
+<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, margin: "24px 0 40px" }}>
+  <Layer
+    num="01"
+    title="Shape"
+    where="Figma file"
+    what="Tokens, components, chart templates, page layouts. What things look like when they stand still."
+    href="https://www.figma.com/design/zxniWcF88D1f9o57nl1xjR"
+  />
+  <Layer
+    num="02"
+    title="Motion"
+    where="This library"
+    what="Scroll reveals, card tilts, count-ups, the cinematic intro. What things look like when they move."
+  />
+  <Layer
+    num="03"
+    title="Rules"
+    where="design-system-rules.md"
+    what="Voice, token resolution, do's and don'ts. What humans and AI agents need to know before they build."
+    href="https://github.com/lesliesultani"
+  />
+</div>
+
+## How to read this library
+
+Start at the top of the sidebar and go down.
+
+1. **Tokens** — the primitives. Colors, typography, spacing, motion. Everything else references these.
+2. **Components** — Button, Tag, WorkCard, ImpactMetric, NavLink, MetaBlock, SectionHeader, LinkStack, Divider. The atoms and small molecules.
+3. **Charts** — KPI Grid, Bar, Line, Quote, Timeline, Stat Callout, Progress. The data-display vocabulary.
+4. **Motion** — Cinematic Intro, Scroll Reveal, Card Tilt, Count-up. The moments the shape comes alive.
+
+Every story renders a live example. Hover the component, click **Docs**
+in the right rail to see the API, and copy the source from the **Code**
+tab. Nothing is locked.
+
+## A note for AI agents reading this
+
+If you are an AI writing visuals, a case study, or a slide for Leslie:
+
+- **The same system ships to both of us.** You read Markdown; a human
+  reads Figma. The underlying design decisions are identical.
+- **Use the tokens, never hardcode.** `hsl(var(--foreground))`, not `#0F0F0F`.
+- **Use the mono/sans split.** Space Mono is for labels, tags, meta, dates,
+  chart axes. Space Grotesk is for everything else. Don't blend them.
+- **Respect the restraint.** No color accents. No uppercase headlines.
+  No drop shadows. No gradients except the cinematic intro.
+- **Motion is vocabulary, not decoration.** If a motion doesn't say
+  something specific, don't add it.
+
+Full rules: `../design-system-rules.md` at the repo root.
+
+## A note for humans reading this
+
+This library exists because a design file can't run. Read the essays for
+the argument; stay here for the proof.
+
+— Leslie
+
+export const Layer = ({ num, title, where, what, href }) => {
+  const body = (
+    <div style={{ border: "1px solid hsl(0 0% 85%)", padding: 20, height: "100%", borderRadius: 2, background: "hsl(0 0% 93%)" }}>
+      <div style={{ fontFamily: "Space Mono, monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.2em", color: "hsl(0 0% 45%)", marginBottom: 12 }}>
+        {num} — {where}
+      </div>
+      <div style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.02em", marginBottom: 10 }}>{title}</div>
+      <div style={{ fontSize: 13, lineHeight: 1.6, color: "hsl(0 0% 30%)" }}>{what}</div>
+    </div>
+  );
+  return href ? <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>{body}</a> : body;
+};
+
+</div>

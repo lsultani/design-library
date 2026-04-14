@@ -1,0 +1,51 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Tokens/Motion" />
+
+# Motion
+
+Motion is a token too. It just can't live inside Figma.
+
+Figma holds _where_ things are. The motion layer holds _how_ they arrive.
+Both are the design system — the split is practical, not conceptual.
+(If you want the longer argument, see the essay
+[_Figma can't hold motion. So what does?_](https://substack.com/@lesliesultani).)
+
+## Durations
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `motion-fast` | 200ms | Micro-interactions, hover states |
+| `motion-base` | 400ms | Most transitions |
+| `motion-slow` | 800ms | Scroll reveals |
+| `motion-scene` | 2.2s | Cinematic intro burst |
+
+## Curves
+
+| Token | Value | Feel |
+| --- | --- | --- |
+| `ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Arrives, lingers, settles |
+| `ease-standard` | `cubic-bezier(0.4, 0, 0.2, 1)` | Neutral workhorse |
+
+## Named patterns
+
+See **Motion / …** in the sidebar for live, running demos of:
+
+- **CinematicIntro** — the full home-page intro (cursor → typing → spark → burst). Fires an `intro-ignite` window event at the spark phase that other layers can sync to.
+- **ParticleField** — the interactive 3D shapes that fly out of the name on ignite. Click to bump, click three times to dissolve. Includes a combined story that stacks it with CinematicIntro (the real hero wiring).
+- **ScrollReveal** — fade-up, slide-left, scale-up variants
+- **CardTilt** — the 3D hover that gives WorkCards thickness
+- **CountUp** — metric animation on scroll, using ease-out-expo
+- **CardGeometry** — canvas-based Swiss wireframe animations that live on the image area of each WorkCard (one variant per case study)
+- **PageTransition** — 8×6 tile grid that choreographs route changes, with a different staging pattern per case study
+
+Each demo is a small, isolated version of what ships on the site.
+You can drop them in, wire real content, and keep going.
+
+## Rules
+
+- Motion uses the tokens. No hand-rolled durations.
+- Respect `prefers-reduced-motion` — every animation in this library
+  short-circuits when the user has set it.
+- Motion is vocabulary, not decoration. If an animation doesn't say something,
+  it's an apology.

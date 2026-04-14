@@ -1,0 +1,58 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Tokens/Colors" />
+
+# Colors
+
+The whole site lives in a six-stop grayscale. No color accent. No brand blue.
+The restraint **is** the brand. If a visual needs color to communicate, it
+probably needs a sharper thought first.
+
+Tokens are defined once in `src/index.css` as HSL triplets on `:root`,
+then mapped by Tailwind to semantic names. Everything downstream —
+components, charts, motion — reads through the semantic layer.
+
+## Primitives
+
+<div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 16, marginTop: 24 }}>
+  <Swatch name="ink-50"  hsl="0 0% 95%" />
+  <Swatch name="ink-100" hsl="0 0% 93%" />
+  <Swatch name="ink-150" hsl="0 0% 88%" note="--background" />
+  <Swatch name="ink-200" hsl="0 0% 84%" note="--card" />
+  <Swatch name="ink-300" hsl="0 0% 75%" />
+  <Swatch name="ink-400" hsl="0 0% 60%" />
+  <Swatch name="ink-500" hsl="0 0% 45%" note="--muted-foreground" />
+  <Swatch name="ink-600" hsl="0 0% 30%" note="--secondary-foreground" />
+  <Swatch name="ink-700" hsl="0 0% 20%" />
+  <Swatch name="ink-800" hsl="0 0% 12%" />
+  <Swatch name="ink-950" hsl="0 0% 6%"  note="--foreground" />
+  <Swatch name="destructive" hsl="0 84% 60%" note="system only" />
+</div>
+
+## Semantic tokens
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--background` | ink-150 | Page surface |
+| `--foreground` | ink-950 | Body text, primary ink |
+| `--card` | ink-200 | Elevated surface |
+| `--primary` | ink-950 | Filled buttons, emphasis |
+| `--primary-foreground` | ink-150 | Text on primary |
+| `--muted-foreground` | ink-500 | Secondary copy |
+| `--border` | ink subtle | 1px hairlines, input frames |
+| `--destructive` | red | Error, delete — never marketing |
+
+## Rules
+
+- Never use hex. Always reference the semantic token.
+- Never hand-roll opacity for ink — use `text-foreground/70` and keep the source of truth in the base color.
+- If you find yourself reaching for a new hue, write a memo arguing for it first.
+
+export const Swatch = ({ name, hsl, note }) => (
+  <div style={{ border: "1px solid hsl(0 0% 85%)", padding: 12, borderRadius: 2 }}>
+    <div style={{ background: `hsl(${hsl})`, height: 72, marginBottom: 8 }} />
+    <div style={{ fontFamily: "Space Mono, monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.15em" }}>{name}</div>
+    <div style={{ fontFamily: "Space Mono, monospace", fontSize: 10, color: "hsl(0 0% 45%)", marginTop: 2 }}>hsl({hsl})</div>
+    {note && <div style={{ fontFamily: "Space Mono, monospace", fontSize: 10, color: "hsl(0 0% 45%)", marginTop: 2 }}>{note}</div>}
+  </div>
+);
