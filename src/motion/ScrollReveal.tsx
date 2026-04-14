@@ -27,10 +27,23 @@ export const ScrollReveal = ({
   playOnMount = false,
 }: ScrollRevealProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(playOnMount);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (playOnMount) return;
+    if (playOnMount) {
+      // Paint once in the "from" state, then flip on the frame after so
+      // the CSS transition has something to animate from. A single rAF
+      // can batch with the state update and skip the initial paint —
+      // double rAF guarantees a clean starting frame.
+      let inner = 0;
+      const outer = requestAnimationFrame(() => {
+        inner = requestAnimationFrame(() => setInView(true));
+      });
+      return () => {
+        cancelAnimationFrame(outer);
+        cancelAnimationFrame(inner);
+      };
+    }
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(

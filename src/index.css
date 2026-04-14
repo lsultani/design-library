@@ -68,8 +68,9 @@
    ========================================================== */
 .reveal-fade-up {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+  transform: translateY(32px);
+  transition: opacity 1500ms var(--ease-out-expo), transform 1500ms var(--ease-out-expo);
+  will-change: opacity, transform;
 }
 .reveal-fade-up.in-view {
   opacity: 1;
@@ -78,8 +79,9 @@
 
 .reveal-slide-left {
   opacity: 0;
-  transform: translateX(-60px);
-  transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+  transform: translateX(-48px);
+  transition: opacity 1400ms var(--ease-out-expo), transform 1400ms var(--ease-out-expo);
+  will-change: opacity, transform;
 }
 .reveal-slide-left.in-view {
   opacity: 1;
@@ -88,8 +90,9 @@
 
 .reveal-scale-up {
   opacity: 0;
-  transform: scale(0.92);
-  transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+  transform: scale(0.94);
+  transition: opacity 1500ms var(--ease-out-expo), transform 1500ms var(--ease-out-expo);
+  will-change: opacity, transform;
 }
 .reveal-scale-up.in-view {
   opacity: 1;
