@@ -1,4 +1,4 @@
-# Sultani Design Library
+# LeslieSultani.com Design Library
 
 Live companion to the [Sultani Design System Figma file](https://www.figma.com/design/zxniWcF88D1f9o57nl1xjR).
 
