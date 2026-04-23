@@ -45,8 +45,14 @@ const patternScatter: PatternFn = (col, row) => {
   return (hash % 1000) / 1000;
 };
 
-const patternStaircase: PatternFn = (col, row, cols, rows) =>
-  (col / (cols - 1)) * 0.65 + (row / (rows - 1)) * 0.35;
+const patternStaircase: PatternFn = (col, row, cols, rows) => {
+  // Discrete stepped bands — tiles on the same diagonal animate together,
+  // then the next band fires after a visible pause. Looks like descending
+  // steps rather than a smooth gradient (which is what diagonal already does).
+  const steps = cols;
+  const band = Math.floor(((col + row) / (cols + rows - 2)) * steps);
+  return band / (steps - 1);
+};
 
 const PATTERN_MAP: Record<PageTransitionPattern, PatternFn> = {
   radial: patternRadial,
