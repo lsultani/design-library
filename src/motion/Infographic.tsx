@@ -28,7 +28,7 @@ import {
   animate,
   type MotionValue,
 } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const BLACK = "#0F0F0F";
 const GRAY = "#737373";
@@ -48,6 +48,55 @@ interface Ctx {
 }
 
 /* ─────────────────────────────────────────────────────────────────── */
+/*  Video infographic — used by article 08.                            */
+/*  Plays from frame 0 on hover, pauses & rewinds to frame 0 on        */
+/*  hover-out, mirroring the rest/swell behavior of the SVG pieces.    */
+/*  Muted, looped, lazy-loaded via preload="metadata".                 */
+/* ─────────────────────────────────────────────────────────────────── */
+const VIDEO_INFOGRAPHICS: Record<string, string> = {
+  // No video-backed infographics right now. Article 08 was briefly wired to
+  // article-08.mp4 but is now a code-rendered piece living in this file
+  // (see I08), matching the architecture of the other seven.
+};
+
+const VideoInfographic = ({
+  src,
+  hovered,
+  className,
+}: {
+  src: string;
+  hovered: boolean;
+  className?: string;
+}) => {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (hovered) {
+      v.play().catch(() => {
+        /* autoplay sometimes rejects; silent retry happens on next hover */
+      });
+    } else {
+      v.pause();
+      v.currentTime = 0;
+    }
+  }, [hovered]);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-hidden="true"
+      className={className}
+      style={{ objectFit: "cover" }}
+    />
+  );
+};
+
+/* ─────────────────────────────────────────────────────────────────── */
 /*  Top-level wrapper                                                  */
 /* ─────────────────────────────────────────────────────────────────── */
 const Infographic = ({
@@ -59,6 +108,14 @@ const Infographic = ({
   hovered: boolean;
   className?: string;
 }) => {
+  // Video-backed infographics short-circuit before any of the SVG /
+  // Framer Motion machinery runs.
+  const videoSrc = VIDEO_INFOGRAPHICS[num];
+  if (videoSrc) {
+    return <VideoInfographic src={videoSrc} hovered={hovered} className={className} />;
+  }
+
+  // SVG / continuous-motion path for every other article.
   const time = useTime();
   const intensity = useMotionValue(0);
 
@@ -514,67 +571,171 @@ const I07 = ({ time, intensity }: Ctx) => {
 
 /* ─────────────────────────────────────────────────────────────────── */
 /*  08 — AI decides. Humans sign off.                                  */
-/*  Two regions: AI on one side, human on the other. From each side,    */
-/*  red dashes oscillate inward toward the center on independent        */
-/*  periods, but never simultaneously reach across. A red ? in the gap  */
-/*  swells on its own period. The contract that doesn't close is the    */
-/*  subject.                                                            */
+/*                                                                      */
+/*  Recreated from a Remotion Cinema composition; same idea, same       */
+/*  irrational period set, scaled to this card's 608×340 viewBox and    */
+/*  hover-gated through the shared `intensity` motion value.            */
+/*                                                                      */
+/*  Visual translation of the article:                                  */
+/*    AI            = a black CIRCLE drifting on the left               */
+/*    Human         = a black SQUARE drifting on the right              */
+/*    Contract      = a dashed line connecting them — alive, not still  */
+/*    Decision      = a small red square oscillating along the line,    */
+/*                    pulled between the two poles, never resting       */
+/*    Surrounds     = a constellation of small grey dots at sub-pixel   */
+/*                    drift rates — the system around the model         */
+/*    Hairlines     = three architectural rules at three y values       */
+/*                    that pan slowly via dashOffset                    */
+/*    Type          = none — geometry alone carries the meaning         */
 /* ─────────────────────────────────────────────────────────────────── */
-const Reach = ({ baseX, dir, i, time, intensity }: { baseX: number; dir: 1 | -1; i: number; time: MotionValue<number>; intensity: MotionValue<number> }) => {
-  const x = useTransform(() => {
-    const it = intensity.get();
-    return dir * ((sn(time.get(), 4300 + i * 510, i * 0.19) + 1) / 2) * 28 * it;
-  });
-  return <motion.rect x={baseX} y={144 + i * 18 - 18} width="36" height="3" fill={RED} style={{ x }} />;
+// Single dot in the surrounding constellation
+const I08Dot = ({ baseX, baseY, seed, time, intensity }: { baseX: number; baseY: number; seed: number; time: MotionValue<number>; intensity: MotionValue<number> }) => {
+  const cx = useTransform(() => baseX + sn(time.get(), 12700 + (seed % 5) * 300, seed * 0.07) * 1.6 * intensity.get());
+  const cy = useTransform(() => baseY + cs(time.get(), 11700 + (seed % 7) * 200, seed * 0.11) * 1.2 * intensity.get());
+  const r = useTransform(() => 0.9 + sn(time.get(), 9300, seed * 0.05) * 0.25 * intensity.get());
+  const op = useTransform(() => 0.16 + (sn(time.get(), 17300, seed * 0.13) + 1) * 0.06 * intensity.get());
+  return <motion.circle cx={cx} cy={cy} r={r} fill={GRAY} style={{ opacity: op }} />;
 };
 const I08 = ({ time, intensity }: Ctx) => {
-  // Left zone — three rectangles breathing
-  const lScale = useTransform(() => 1 + sn(time.get(), 6300) * 0.1 * intensity.get());
-  // Right zone — three rectangles breathing on different period
-  const rScale = useTransform(() => 1 + sn(time.get(), 5900, 0.27) * 0.1 * intensity.get());
-  // ?: rest = static at scale 1.0. on hover swells.
-  const qScale = useTransform(() => {
-    const it = intensity.get();
-    return 1 + Math.abs(sn(time.get(), 5100)) * 0.7 * it;
-  });
-  const qY = useTransform(() => 168 + sn(time.get(), 7300, 0.13) * 8 * intensity.get());
-  const camX = useTransform(() => sn(time.get(), 17500) * 2 * intensity.get());
-  const camS = useTransform(() => 1 + sn(time.get(), 19700) * 0.008 * intensity.get());
+  // Camera — every shape lives inside this drifting parent
+  const camX = useTransform(() => sn(time.get(), 17300) * 5 * intensity.get());
+  const camY = useTransform(() => sn(time.get(), 19100, 0.31) * 3 * intensity.get());
+  const camScale = useTransform(() => 1 + sn(time.get(), 21300) * 0.012 * intensity.get());
+  const camRot = useTransform(() => sn(time.get(), 13900, 0.71) * 0.5 * intensity.get());
+
+  // AI — circle on the left
+  const aiCx = useTransform(() => 175 + sn(time.get(), 9300) * 18 * intensity.get());
+  const aiCy = useTransform(() => 170 + sn(time.get(), 11700, 0.27) * 12 * intensity.get());
+  const aiR = useTransform(() => 65 + sn(time.get(), 7100, 0.41) * 3 * intensity.get());
+  const aiOuterR = useTransform(() => aiR.get() + 14);
+  const aiOuterDashA = useTransform(() => 3 + sn(time.get(), 7100, 0.5) * 0.8 * intensity.get());
+  const aiOuterOffset = useTransform(() => -time.get() * 0.004 * intensity.get());
+
+  // Human — square on the right
+  const huCx = useTransform(() => 435 + sn(time.get(), 11700, 0.53) * 20 * intensity.get());
+  const huCy = useTransform(() => 168 + sn(time.get(), 9300, 0.83) * 14 * intensity.get());
+  const huSize = useTransform(() => 110 + sn(time.get(), 7100, 0.13) * 5 * intensity.get());
+  const huX = useTransform(() => huCx.get() - huSize.get() / 2);
+  const huY = useTransform(() => huCy.get() - huSize.get() / 2);
+  const huOuterX = useTransform(() => huCx.get() - (huSize.get() + 22) / 2);
+  const huOuterY = useTransform(() => huCy.get() - (huSize.get() + 22) / 2);
+  const huOuterSize = useTransform(() => huSize.get() + 22);
+  const huOuterDashA = useTransform(() => 3.5 + sn(time.get(), 9300, 0.7) * 1 * intensity.get());
+  const huOuterOffset = useTransform(() => time.get() * 0.003 * intensity.get());
+
+  // Contract dashed line between the two
+  const lineDashA = useTransform(() => 4 + sn(time.get(), 9300, 0.6) * 1.5 * intensity.get());
+  const lineDashB = useTransform(() => 7 + sn(time.get(), 11700, 0.2) * 2 * intensity.get());
+  const lineOffset = useTransform(() => -time.get() * 0.008 * intensity.get());
+
+  // Decision accent — red square oscillating along the line, never reaching either pole
+  const u = useTransform(() => 0.5 + sn(time.get(), 11700) * 0.30 * intensity.get() + sn(time.get(), 7100, 0.4) * 0.05 * intensity.get());
+  const accCx = useTransform(() => aiCx.get() + (huCx.get() - aiCx.get()) * u.get());
+  const accCy = useTransform(() => aiCy.get() + (huCy.get() - aiCy.get()) * u.get() + sn(time.get(), 19100, 0.17) * 5 * intensity.get());
+  const accSize = useTransform(() => 12 + sn(time.get(), 7100, 0.08) * 1.5 * intensity.get());
+  const accRot = useTransform(() => (time.get() * 0.012 + sn(time.get(), 13900, 0.3) * 12) * intensity.get());
+  const accOuterDashA = useTransform(() => 1.8 + sn(time.get(), 9300, 0.2) * 0.6 * intensity.get());
+  const accOuterOffset = useTransform(() => -time.get() * 0.008 * intensity.get());
+
+  // Hairlines — pan via dashOffset
+  const hl1Y = useTransform(() => 50 + sn(time.get(), 13900) * 3 * intensity.get());
+  const hl1Off = useTransform(() => -time.get() * 0.014 * intensity.get());
+  const hl2Y = useTransform(() => 290 + sn(time.get(), 17300, 0.5) * 2 * intensity.get());
+  const hl2Off = useTransform(() => time.get() * 0.009 * intensity.get());
+  const hl3Y = useTransform(() => 170 + sn(time.get(), 19100, 0.21) * 6 * intensity.get());
+  const hl3Off = useTransform(() => -time.get() * 0.005 * intensity.get());
+
+  // Architectural axis — vertical dashed rule that slowly rotates
+  const axisRot = useTransform(() => sn(time.get(), 21300, 0.13) * 5 * intensity.get());
+  const axisOff = useTransform(() => -time.get() * 0.006 * intensity.get());
+
+  // Pre-built dot grid positions (4 rows × 7 columns)
+  const dots: { baseX: number; baseY: number; seed: number }[] = [];
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 7; c++) {
+      dots.push({ baseX: 32 + c * 90, baseY: 42 + r * 86, seed: r * 7 + c * 13 });
+    }
+  }
+
   return (
-    <motion.g style={{ x: camX, scale: camS, transformBox: "fill-box", transformOrigin: "center" }}>
-      {/* left zone */}
-      <motion.g style={{ scale: lScale, transformBox: "fill-box", transformOrigin: "100px 170px" }}>
-        <rect x="48" y="76" width="160" height="40" fill={BLACK} />
-        <rect x="48" y="124" width="120" height="40" fill={BLACK} />
-        <rect x="48" y="172" width="160" height="40" fill={BLACK} />
-        <rect x="48" y="220" width="100" height="40" fill={BLACK} />
+    <motion.g
+      style={{ x: camX, y: camY, scale: camScale, rotate: camRot, transformBox: "fill-box", transformOrigin: "center" }}
+    >
+      {/* Surrounds — constellation of drifting dots */}
+      {dots.map((d) => (
+        <I08Dot key={d.seed} baseX={d.baseX} baseY={d.baseY} seed={d.seed} time={time} intensity={intensity} />
+      ))}
+
+      {/* Hairlines — three architectural rules panning via dashOffset */}
+      <motion.line x1={-40} x2={648} stroke={BLACK} strokeOpacity={0.18} strokeWidth={0.8} strokeDasharray="5 11" style={{ y: hl1Y, strokeDashoffset: hl1Off } as any} y1={50} y2={50} />
+      <motion.line x1={-40} x2={648} stroke={BLACK} strokeOpacity={0.18} strokeWidth={0.8} strokeDasharray="5 11" style={{ y: hl2Y, strokeDashoffset: hl2Off } as any} y1={290} y2={290} />
+      <motion.line x1={-40} x2={648} stroke={BLACK} strokeOpacity={0.10} strokeWidth={0.8} strokeDasharray="5 11" style={{ y: hl3Y, strokeDashoffset: hl3Off } as any} y1={170} y2={170} />
+
+      {/* Architectural axis — vertical rule, slowly rotates */}
+      <motion.g style={{ rotate: axisRot, transformBox: "fill-box", transformOrigin: "center" }}>
+        <motion.line x1={304} y1={-20} x2={304} y2={360} stroke={BLACK} strokeOpacity={0.10} strokeWidth={0.8} strokeDasharray="2 9" style={{ strokeDashoffset: axisOff } as any} />
       </motion.g>
-      {/* right zone */}
-      <motion.g style={{ scale: rScale, transformBox: "fill-box", transformOrigin: "508px 170px" }}>
-        <rect x="400" y="76" width="160" height="40" fill={BLACK} />
-        <rect x="440" y="124" width="120" height="40" fill={BLACK} />
-        <rect x="400" y="172" width="160" height="40" fill={BLACK} />
-        <rect x="460" y="220" width="100" height="40" fill={BLACK} />
+
+      {/* Contract dashed line — connecting AI and Human */}
+      <motion.line
+        x1={aiCx}
+        y1={aiCy}
+        x2={huCx}
+        y2={huCy}
+        stroke={BLACK}
+        strokeWidth={1.1}
+        style={{ strokeDasharray: useTransform(() => `${lineDashA.get()} ${lineDashB.get()}`), strokeDashoffset: lineOffset } as any}
+      />
+
+      {/* AI — outer breathing ring + filled circle */}
+      <motion.circle
+        cx={aiCx}
+        cy={aiCy}
+        r={aiOuterR}
+        fill="none"
+        stroke={BLACK}
+        strokeOpacity={0.32}
+        strokeWidth={0.9}
+        style={{ strokeDasharray: useTransform(() => `${aiOuterDashA.get()} 7`), strokeDashoffset: aiOuterOffset } as any}
+      />
+      <motion.circle cx={aiCx} cy={aiCy} r={aiR} fill={BLACK} />
+
+      {/* Human — outer breathing frame + filled square */}
+      <motion.rect
+        x={huOuterX}
+        y={huOuterY}
+        width={huOuterSize}
+        height={huOuterSize}
+        fill="none"
+        stroke={BLACK}
+        strokeOpacity={0.30}
+        strokeWidth={0.9}
+        style={{ strokeDasharray: useTransform(() => `${huOuterDashA.get()} 8`), strokeDashoffset: huOuterOffset } as any}
+      />
+      <motion.rect x={huX} y={huY} width={huSize} height={huSize} fill={BLACK} />
+
+      {/* Decision accent — red square + outer ring, drifts along the line */}
+      <motion.g style={{ x: accCx, y: accCy, rotate: accRot, transformBox: "fill-box", transformOrigin: "center" }}>
+        <motion.rect
+          x={useTransform(() => -accSize.get() / 2)}
+          y={useTransform(() => -accSize.get() / 2)}
+          width={accSize}
+          height={accSize}
+          fill={RED}
+        />
+        <motion.rect
+          x={useTransform(() => -accSize.get() / 2 - 5)}
+          y={useTransform(() => -accSize.get() / 2 - 5)}
+          width={useTransform(() => accSize.get() + 10)}
+          height={useTransform(() => accSize.get() + 10)}
+          fill="none"
+          stroke={RED}
+          strokeOpacity={0.55}
+          strokeWidth={0.8}
+          style={{ strokeDasharray: useTransform(() => `${accOuterDashA.get()} 4`), strokeDashoffset: accOuterOffset } as any}
+        />
       </motion.g>
-      {/* reaching dashes from left, never crossing */}
-      <Reach baseX={216} dir={1} i={0} time={time} intensity={intensity} />
-      <Reach baseX={216} dir={1} i={1} time={time} intensity={intensity} />
-      <Reach baseX={216} dir={1} i={2} time={time} intensity={intensity} />
-      {/* reaching dashes from right, never crossing */}
-      <Reach baseX={356} dir={-1} i={0} time={time} intensity={intensity} />
-      <Reach baseX={356} dir={-1} i={1} time={time} intensity={intensity} />
-      <Reach baseX={356} dir={-1} i={2} time={time} intensity={intensity} />
-      {/* the unanswerable ? */}
-      <motion.text
-        x="298"
-        fill={RED}
-        fontFamily={FONT_MONO}
-        fontSize="34"
-        fontWeight="700"
-        style={{ y: qY, scale: qScale, transformBox: "fill-box", transformOrigin: "center" }}
-      >
-        ?
-      </motion.text>
+
     </motion.g>
   );
 };
