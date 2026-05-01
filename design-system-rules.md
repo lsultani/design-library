@@ -56,10 +56,25 @@ Components MUST consume semantic tokens (`color/semantic/foreground`), never pri
 | `motion/duration/base`     | 400ms — page slides, nav             |
 | `motion/duration/slow`     | 800ms — scroll reveals               |
 | `motion/duration/scene`    | 1200ms — hero reveals                |
+| `motion/duration/swell`    | ~700ms — hover-driven motion swell (spring-controlled, not a fixed duration) |
 | `motion/ease/out-expo`     | `cubic-bezier(0.16, 1, 0.3, 1)` — signature curve |
 | `motion/ease/standard`     | `cubic-bezier(0.4, 0, 0.2, 1)` — everyday transitions |
 
 Motion spec table: Figma page `04 · Foundations — Motion`, section "Motion Spec". Actual implementation lives in React components at `src/components/` — never recreate motion in Figma or from CSS alone.
+
+### Continuous-motion pattern (cinematic, not transitional)
+
+Used by the AI-Native Series infographics. Reach for this when motion is meant to read as cinema rather than UI feedback — when the motion *is* the artifact, not a response to user action.
+
+Rules:
+
+1. **No keyframes. No states. No scenes.** Every visual property is computed live every frame as a sum of pure sinusoids. `value(t) = base + Σ sin(t / period_i + phase_i) * amp_i`.
+2. **Periods are incommensurate.** Use primes / near-primes (9100, 11700, 13900, 17300, 21300 ms) so no two oscillators share a common multiple. The system never returns to its starting configuration.
+3. **Hover is amplitude, not state.** A spring-driven `intensity` motion value swells from 0 (rest) to 1 (hover). Every amplitude multiplies by `intensity`. At rest every sin contribution is exactly zero — composition holds still. On hover, motion fades up. There is no scene to switch to.
+4. **Camera always drifts.** Wrap the piece in a parent `<motion.g>` with continuous x / scale / rotate driven by sine. Slow pan, scale, drift — never cut to a new viewpoint.
+5. **No opacity 0 → 1 pops.** Elements that need to "appear" enter via translate from off-canvas, or draw themselves via `pathLength`. Opacity is reserved for trail echoes.
+
+Implementation reference: `src/motion/Infographic.tsx`. The eight pieces inside that file are the canonical examples — port the pattern (`useTime` → `useTransform` → continuous sine-based properties), don't try to build the same thing with variant chains or keyframe arrays.
 
 ---
 
@@ -90,6 +105,7 @@ Motion spec table: Figma page `04 · Foundations — Motion`, section "Motion Sp
 - `MetaBlock` (mono label + sentence-case value)
 - `ImpactMetric` (big number + caption)
 - `WorkCard` (image + title + hook + tags, radius 16)
+- `ArticleCard` (1:1 square card for the AI-Native Series — mono eyebrow, tagline ↔ description morph on hover, embedded continuous-motion infographic, 12% gray hover tint, corner brackets)
 - `LinkStack`
 - `Divider`
 
@@ -115,6 +131,7 @@ Grayscale only. No decorative color. Density comes from typography. Hierarchy fr
 - **shadcn/ui** component base, configured via `components.json`
 - **React Router** for navigation
 - **Three.js** for the `ParticleField` canvas effect
+- **Framer Motion** for hover-driven cinematic motion (`Infographic` and the `ArticleCard` chrome)
 - **Radix UI** primitives (via shadcn)
 - **Lucide React** for icons
 - **Playwright** + **Vitest** for testing

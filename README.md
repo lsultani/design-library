@@ -40,11 +40,12 @@ library/
 ├── .storybook/        Storybook config + font loader
 ├── src/
 │   ├── index.css      Tokens + motion CSS (mirrors the site)
-│   ├── components/    Button, Tag, WorkCard, ImpactMetric, NavLink,
-│   │                  MetaBlock, SectionHeader, LinkStack, Divider
+│   ├── components/    Button, Tag, WorkCard, ArticleCard, ImpactMetric,
+│   │                  NavLink, MetaBlock, SectionHeader, LinkStack, Divider
 │   ├── charts/        KPIGrid, BarChart, LineChart, QuoteBlock,
 │   │                  Timeline, StatCallout, ProgressBar
-│   ├── motion/        CinematicIntro, ScrollReveal, CardTilt, CountUp
+│   ├── motion/        CinematicIntro, ScrollReveal, CardTilt, CountUp,
+│   │                  Infographic (continuous time-driven cinematic motion)
 │   └── stories/       MDX docs + .stories.tsx examples
 ├── tailwind.config.ts
 ├── postcss.config.js
