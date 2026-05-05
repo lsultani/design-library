@@ -152,7 +152,17 @@ const ArticleCard = ({ article }: { article: SeriesArticle }) => {
             {article.status}
           </span>
           {isLink && (
-            <motion.span variants={arrowVariants}>
+            // "Read" + arrow CTA on hover/focus. Mirrors the "Explore" + arrow
+            // pattern on WorkCard / CaseStudies / WorkCarousel — sans medium,
+            // sentence case, sized to feel like a call-to-action rather than
+            // a system label. Overrides the parent row's mono / uppercase /
+            // tracked styling for just this group.
+            <motion.span
+              variants={arrowVariants}
+              className="inline-flex items-center gap-1.5 font-sans font-medium normal-case tracking-normal"
+              style={{ fontSize: "max(11px, 3cqw)" }}
+            >
+              <span>Read</span>
               <ArrowUpRight size={14} strokeWidth={2} />
             </motion.span>
           )}

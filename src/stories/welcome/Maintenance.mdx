@@ -1,0 +1,149 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Welcome/Maintenance (the AI loop)" />
+
+<div style={{ fontFamily: "Space Grotesk, sans-serif", maxWidth: 780 }}>
+
+<div style={{ fontFamily: "Space Mono, monospace", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.25em", color: "hsl(0 0% 45%)", marginBottom: 16 }}>
+  AI-NATIVE DESIGN SERIES — WORKING EXAMPLE
+</div>
+
+# How I keep code, Figma, and the AI in sync.
+
+This page is the actual working manual I use with my AI assistant to keep three artifacts agreeing with each other: a live website, this Storybook library, and a Figma design system file. Plus a fourth — the rules document AI agents read before generating anything in my voice.
+
+It's published here because the AI-Native Design Series is an argument that this loop is the new core skill. Showing the loop is more useful than describing it.
+
+## The four sources of truth (and which one wins)
+
+| Artifact | What it is | Source-of-truth role |
+| --- | --- | --- |
+| Production website | The actual implementation | Truth for behavior, motion, real layouts |
+| This Storybook library | Isolated component playground | Truth for component API and visual states |
+| Figma design system file | Visual reference + tokens | Truth for tokens, typography, human-readable spec |
+| `design-system-rules.md` | AI consumption contract | Truth for "how to use this system" prose |
+
+The rule when they drift: **code wins for behavior, Figma wins for tokens, the rules doc wins for prose.** Whichever changed first triggers the others to catch up within one sprint.
+
+## When something new gets built on the website
+
+Use this exact sequence. Either run it yourself or hand it to an AI agent as the prompt.
+
+### 1. Promote the new piece into the design library
+
+If the website has a new component, chart, motion piece, or token:
+
+- Copy the source file from the website repo into `design-library/src/{components|charts|motion}/`.
+- Strip site-only props (data, page-specific copy). Keep the component generic.
+- Add a Storybook entry at `design-library/src/stories/{components|charts|motion}/<Name>.stories.tsx`.
+- Run `npm run storybook` and verify the rest, hover, and edge-case states all render.
+- Run `npm run build-storybook` to confirm the static build still works.
+
+### 2. Add it to the Figma design system file
+
+Hand the AI a prompt like:
+
+> I added `<ComponentName>` to the design library at `src/components/<ComponentName>.tsx`. Please add it to the Figma file at `<your-figma-file-url>` with the same pattern as existing components on page 05 — section frame with mono label, description, and the published component frame inside.
+
+What the AI should do (and does, when given this prompt):
+
+- Read the new file in the repo.
+- Inspect existing components on Figma page `05 · Components` (or `06 · Charts & Visuals` for charts).
+- Build a frame using the same auto-layout pattern: vertical, 24px gap, mono label, optional description.
+- Bind colors to existing variables (`color/semantic/foreground`, `color/semantic/card`, etc.). Never hex.
+- Use Space Grotesk + Space Mono only.
+- Set the component description to a paragraph that explains: shape, behavior, key props, motion notes, what NOT to recreate in Figma.
+- Insert the section into page 05 or 06 in the right alphabetical/categorical place.
+
+### 3. Update `design-system-rules.md`
+
+Add the component name to the "Published Figma components" or "Chart vocabulary" list. Update any version counts that changed.
+
+### 4. Update the cover frame counts (if needed)
+
+The cover page shows PAGES / COMPONENTS / VARIABLES / FONTS counts. If you crossed a meaningful threshold, update the count text.
+
+### 5. Commit
+
+```
+git add src/{components|charts|motion}/<NewName>.tsx
+git add src/stories/{...}/<NewName>.stories.tsx
+git add design-system-rules.md
+git commit -m "design-system: add <NewName>"
+```
+
+The Figma file doesn't get a commit — it has its own version history.
+
+## When a token changes
+
+Tokens are the most fragile piece because four things must agree:
+
+1. The website's `src/index.css` — runtime CSS vars (HSL)
+2. The website's `tailwind.config.ts` — Tailwind class mappings
+3. The design library's `src/index.css` — must be byte-identical to the website's
+4. Figma `Sultani Tokens` collection, `Light` mode
+
+Process:
+
+- Change the value in the website first (because it's the live truth).
+- Mirror into the design library's `src/index.css` immediately.
+- Open Figma, open Variables panel, find the matching variable, update its value.
+- If it's a new token: add it to all four places, AND add an entry to `design-system-rules.md`.
+
+## When a component is renamed or deprecated
+
+- Rename the file in `src/components/`.
+- Rename the Storybook entry.
+- In Figma, rename both the section frame and the COMPONENT inside. (Component instances on Templates and Charts pages keep working — Figma updates references by ID.)
+- Update `design-system-rules.md` to reflect the new name.
+- If deprecated: don't delete the Figma component. Move it to a `Deprecated` page so existing instances don't break, and add `[DEPRECATED]` to its description.
+
+## What lives in code only (never recreate in Figma)
+
+- Anything in `src/motion/` — Framer Motion variants, useTime/useTransform compositions, particle fields, the cinematic intro burst, page transitions
+- Container queries (the `cqw` units components use to scale with their own width)
+- Hover state crossfades
+- Continuous-motion infographic scenes
+
+Figma should show the rest state of these pieces and a one-line caption pointing to the source file.
+
+## What lives in Figma only (never recreate in code)
+
+- The Cover page and Spec & AI Usage page — these are documentation, not implementation
+- Token collections (variables) — code reads from CSS vars; Figma is the human-readable mirror
+- Page templates — these are reference layouts, not actual page components
+
+## Standard prompts to give the AI
+
+Save these as snippets:
+
+**"Audit drift"**
+
+> Compare `design-library/src/components/` and `design-library/src/charts/` against the Figma file at `<your-figma-file-url>`. List every piece of drift: components in code missing from Figma, components in Figma missing from code, token mismatches, description gaps. Don't fix anything yet — just produce the gap report.
+
+**"Add a new component to Figma"**
+
+> I just added `<X>` at `src/components/<X>.tsx` with a story at `src/stories/components/<X>.stories.tsx`. Read both files, then add `<X>` to the Figma file as a published component on page 05 — same pattern as the existing components. Include a description that explains the shape, key props, and any code-only behavior.
+
+**"Sync tokens"**
+
+> Read `design-library/src/index.css` and the Figma file's `Sultani Tokens` collection. List any variable values that differ. Fix Figma to match the code (code wins for tokens).
+
+**"Bump version"**
+
+> We hit a milestone — bump the design system version. Update the cover page in Figma, update any counts that changed, and add a new entry to the bottom of `design-system-rules.md`.
+
+## Cadence
+
+- **Per-PR:** if a PR adds/changes a component, queue a Figma update task.
+- **Weekly:** run "Audit drift" on Fridays. Catch what slipped.
+- **Quarterly:** rerun the full inventory. Verify variable values match. Bump the minor version.
+- **Annually:** re-read `design-system-rules.md` end-to-end. Prune what no longer applies.
+
+## Why publish this
+
+Most design systems treat the maintenance loop as private operational knowledge. I think it's the most interesting part. The components are downstream of the loop. If you copy the components without copying the loop, you're just borrowing visuals. The loop is the actual system.
+
+— Leslie
+
+</div>
