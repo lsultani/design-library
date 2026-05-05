@@ -16,12 +16,12 @@ It's published here because the AI-Native Design Series is an argument that this
 
 ## The four sources of truth (and which one wins)
 
-| Artifact | What it is | Source-of-truth role |
-| --- | --- | --- |
-| Production website | The actual implementation | Truth for behavior, motion, real layouts |
-| This Storybook library | Isolated component playground | Truth for component API and visual states |
-| Figma design system file | Visual reference + tokens | Truth for tokens, typography, human-readable spec |
-| `design-system-rules.md` | AI consumption contract | Truth for "how to use this system" prose |
+<SourcesTable rows={[
+  ["Production website", "The actual implementation", "Truth for behavior, motion, real layouts"],
+  ["This Storybook library", "Isolated component playground", "Truth for component API and visual states"],
+  ["Figma design system file", "Visual reference + tokens", "Truth for tokens, typography, human-readable spec"],
+  ["design-system-rules.md", "AI consumption contract", "Truth for 'how to use this system' prose"],
+]} />
 
 The rule when they drift: **code wins for behavior, Figma wins for tokens, the rules doc wins for prose.** Whichever changed first triggers the others to catch up within one sprint.
 
@@ -145,5 +145,53 @@ Save these as snippets:
 Most design systems treat the maintenance loop as private operational knowledge. I think it's the most interesting part. The components are downstream of the loop. If you copy the components without copying the loop, you're just borrowing visuals. The loop is the actual system.
 
 — Leslie
+
+export const SourcesTable = ({ rows }) => {
+  const headerCell = {
+    fontFamily: "Space Mono, monospace",
+    fontSize: 10,
+    textTransform: "uppercase",
+    letterSpacing: "0.2em",
+    color: "hsl(0 0% 30%)",
+    textAlign: "left",
+    padding: "12px 16px 12px 0",
+    borderBottom: "1px solid hsl(0 0% 30%)",
+    verticalAlign: "top",
+  };
+  const bodyCell = {
+    fontFamily: "Space Grotesk, sans-serif",
+    fontSize: 14,
+    lineHeight: 1.5,
+    color: "hsl(0 0% 6%)",
+    textAlign: "left",
+    padding: "16px 16px 16px 0",
+    borderBottom: "1px solid hsl(0 0% 85%)",
+    verticalAlign: "top",
+  };
+  const lastRowCell = { ...bodyCell, borderBottom: "none" };
+  return (
+    <table style={{ width: "100%", borderCollapse: "collapse", margin: "16px 0 24px", tableLayout: "fixed" }}>
+      <thead>
+        <tr>
+          <th style={{ ...headerCell, width: "26%" }}>Artifact</th>
+          <th style={{ ...headerCell, width: "30%" }}>What it is</th>
+          <th style={headerCell}>Source-of-truth role</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(([a, b, c], i) => {
+          const cell = i === rows.length - 1 ? lastRowCell : bodyCell;
+          return (
+            <tr key={i}>
+              <td style={cell}><strong style={{ fontWeight: 500 }}>{a}</strong></td>
+              <td style={cell}>{b}</td>
+              <td style={cell}>{c}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};
 
 </div>
