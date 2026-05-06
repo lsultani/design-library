@@ -3,3 +3,6 @@ storybook-static
 *.log
 .DS_Store
 .vite
+
+# Claude working memory — local only, never push
+CLAUDE.md
