@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { KPIGrid } from "../../charts/KPIGrid";
 
 const meta: Meta<typeof KPIGrid> = {

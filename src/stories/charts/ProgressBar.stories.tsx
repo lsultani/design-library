@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ProgressBar } from "../../charts/ProgressBar";
 
 const meta: Meta<typeof ProgressBar> = {

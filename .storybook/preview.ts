@@ -1,17 +1,17 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/react-vite";
 import "../src/index.css";
 
 const preview: Preview = {
   tags: ['autodocs'],
+
   parameters: {
     layout: "centered",
     backgrounds: {
-      default: "Sultani background",
-      values: [
-        { name: "Sultani background", value: "hsl(0 0% 88%)" },
-        { name: "Ink 950", value: "hsl(0 0% 6%)" },
-        { name: "White", value: "#ffffff" },
-      ],
+      options: {
+        sultani_background: { name: "Sultani background", value: "hsl(0 0% 88%)" },
+        ink_950: { name: "Ink 950", value: "hsl(0 0% 6%)" },
+        white: { name: "White", value: "#ffffff" }
+      }
     },
     controls: {
       matchers: {
@@ -32,6 +32,12 @@ const preview: Preview = {
       },
     },
   },
+
+  initialGlobals: {
+    backgrounds: {
+      value: "sultani_background"
+    }
+  }
 };
 
 export default preview;

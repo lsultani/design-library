@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import { ParticleField } from "../../motion/ParticleField";
 import { CinematicIntro } from "../../motion/CinematicIntro";

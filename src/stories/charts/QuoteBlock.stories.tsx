@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QuoteBlock } from "../../charts/QuoteBlock";
 
 const meta: Meta<typeof QuoteBlock> = {

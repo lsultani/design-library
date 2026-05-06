@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ImpactMetric } from "../../components/ImpactMetric";
 
 const meta: Meta<typeof ImpactMetric> = {

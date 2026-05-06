@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StatCallout } from "../../charts/StatCallout";
 
 const meta: Meta<typeof StatCallout> = {

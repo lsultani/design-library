@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LinkStack } from "../../components/LinkStack";
 
 const meta: Meta<typeof LinkStack> = {

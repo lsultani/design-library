@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ProcessFlow } from "../../charts/ProcessFlow";
 
 const meta: Meta<typeof ProcessFlow> = {

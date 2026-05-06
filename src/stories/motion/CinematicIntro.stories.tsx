@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CinematicIntro } from "../../motion/CinematicIntro";
 
 const meta: Meta<typeof CinematicIntro> = {

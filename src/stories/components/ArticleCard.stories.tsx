@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { default as ArticleCardDefault } from "../../components/ArticleCard";
 import type { SeriesArticle } from "../../components/ArticleCard";
 

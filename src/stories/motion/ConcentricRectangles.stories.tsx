@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ConcentricRectangles } from "../../motion/ConcentricRectangles";
 
 const meta: Meta<typeof ConcentricRectangles> = {

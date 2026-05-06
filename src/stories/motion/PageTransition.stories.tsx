@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PageTransition } from "../../motion/PageTransition";
 
 const meta: Meta<typeof PageTransition> = {
