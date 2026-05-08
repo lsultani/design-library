@@ -114,7 +114,7 @@ export const CompressionChart = ({
               opacity: stage >= 2 ? 1 : 0,
             }}
           >
-            <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-foreground/40">
+            <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-foreground/60">
               Time left on the table
             </span>
           </div>

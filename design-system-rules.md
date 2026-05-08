@@ -33,6 +33,7 @@ Components MUST consume semantic tokens (`color/semantic/foreground`), never pri
 - Grayscale only. Ink scale from `ink-50` (near-white #FAFAFA) to `ink-950` (near-black #0F0F0F).
 - `destructive` (`hsl(0 84% 60%)`) is the only non-gray. Reserved for destructive states. Not a decorative accent.
 - Opacity is the hierarchy system: `foreground @ 10%` hairlines, `@ 20%` borders, `@ 30%` dividers, `@ 60%` muted body, `@ 85%` secondary body, `@ 100%` primary. Do not introduce mid-gray primitives to avoid opacity.
+- **Legibility floor for text: `/60` foreground-on-light, `/55` white-on-dark.** The `/10–/45` tiers are for non-text elements only — hairlines, borders, dividers, decorative icons. Small mono labels (≤10px) are the most common offender. If a label needs to feel quieter, shrink the size or loosen tracking before reaching for opacity below the floor. State-based dimming (e.g. inactive nav-link at `/50` paired with hover `/80` and active `/100`) is the only allowed exception, because the interaction itself signals legibility.
 
 ### Radius rules
 

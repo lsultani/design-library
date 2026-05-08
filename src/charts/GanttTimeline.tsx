@@ -133,10 +133,10 @@ export const GanttTimeline = ({
 
       {/* Footer */}
       <div className="flex items-center justify-between mt-4">
-        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/40">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/60">
           Time
         </span>
-        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/40">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-foreground/60">
           Shared artifact
         </span>
       </div>

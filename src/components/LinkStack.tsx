@@ -19,7 +19,7 @@ export interface LinkStackProps {
 export const LinkStack = ({ title, links }: LinkStackProps) => (
   <div className="flex flex-col gap-3">
     {title && (
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/50 mb-1">
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/60 mb-1">
         {title}
       </p>
     )}
