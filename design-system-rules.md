@@ -109,6 +109,7 @@ Implementation reference: `src/motion/Infographic.tsx`. The eight pieces inside 
 - `ArticleCard` (1:1 square card for the AI-Native Series — mono eyebrow, tagline ↔ description morph on hover, embedded continuous-motion infographic, 12% gray hover tint, corner brackets)
 - `LinkStack`
 - `Divider`
+- `SectionProgress` (Swiss-flat right-edge card on case-study pages. Thin rectangle, 1px ink/30 border, near-white fill so it stays legible on light, warm, and dark surfaces. Inside, mono numerals stacked vertically — the section currently in view sits at full foreground opacity with a 2px hairline rule on its left edge, the others at /30. The hairline marker is the "you are here" indicator that slides as the reader scrolls; nothing else moves. Appears once section 01 enters the viewport. Pinned to the viewport bottom by default; when the case-study footer nav scrolls into view, the card detaches from the viewport-bottom anchor and centers itself vertically in the zone between that nav and the global Footer — it never overlaps either. Rendered through a React portal to document.body so transformed ancestors don't trap it in their containing block.)
 
 ### Chart vocabulary
 
@@ -118,7 +119,9 @@ Grayscale only. No decorative color. Density comes from typography. Hierarchy fr
 - `Bar Chart / Horizontal` — left labels, foreground bars, right values, no gridlines
 - `Line Chart / Trend` — single 2px line, endpoint dot, mono x-axis labels
 - `Stat / Callout` — Display/Hero number + mono label + body
-- `Quote / Pull` — Display/H2 + hairline rule + mono attribution
+- `Quote / Pull` — Leslie's own punchline, italic with a left rule, no attribution
+- `Quote / Block` — third-party testimony, italic with mono attribution (name + role). Supports default / warm / dark surface variants for case-study placement.
+- `Caption / Block` — image caption with smart split. Short captions (≤90 chars) render as a mono label; long captions split on the first sentence boundary into a short mono label + light body prose. Adapts to default / warm / dark surfaces.
 - `Progress / Linear` — 8px bar, mono label + %
 - `Timeline / Horizontal` — baseline + dots + mono labels
 

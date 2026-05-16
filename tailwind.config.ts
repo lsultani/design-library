@@ -57,6 +57,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Case study surface + ink tokens. Mirrors production site config.
+        "cs-dark": "hsl(var(--cs-surface-dark))",
+        "cs-warm": "hsl(var(--cs-surface-warm))",
+        "cs-ink-dark": "hsl(var(--cs-ink-on-dark))",
+        "cs-ink-warm": "hsl(var(--cs-ink-on-warm))",
+      },
+      maxWidth: {
+        "cs-content": "var(--cs-content-max)",
+        "cs-gallery": "var(--cs-gallery-max)",
       },
       borderRadius: {
         lg: "var(--radius)",

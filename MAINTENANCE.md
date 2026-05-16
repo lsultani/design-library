@@ -154,9 +154,9 @@ Save these as snippets:
 
 ## Quick reference — current state (May 2026)
 
-Components in code: ArticleCard, Button, Divider, ImpactMetric, LinkStack, MetaBlock, NavLink, SectionHeader, Tag, WorkCard.
+Components in code: ArticleCard, Button, Divider, ImpactMetric, LinkStack, MetaBlock, NavLink, SectionHeader, **SectionProgress (added May 2026)**, Tag, WorkCard.
 
-Charts in code: BarChart, CompressionChart, GanttTimeline, KPIGrid, LineChart, ProcessFlow, ProgressBar, QuoteBlock, StatCallout, Timeline.
+Charts in code: BarChart, **CaptionBlock (added May 2026)**, CompressionChart, GanttTimeline, KPIGrid, LineChart, ProcessFlow, ProgressBar, QuoteBlock (variant support added May 2026), StatCallout, Timeline.
 
 Motion in code: CardGeometry, CardTilt, CinematicIntro, ConcentricRectangles, CountUp, Infographic, PageTransition, ParticleField, ScrollReveal, TickerText.
 

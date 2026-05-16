@@ -37,6 +37,16 @@
     --radius: 0rem;
 
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Case study surface + ink tokens. Mirrored from the production site's
+       src/index.css — these drive Section/Prose/PullQuote/QuoteBlock variant
+       coloring inside case study pages. If they drift, the system is lying. */
+    --cs-surface-dark: 0 0% 5.5%;        /* near-black section bg */
+    --cs-surface-warm: 36 24% 91%;       /* warm cream section bg */
+    --cs-ink-on-dark: 0 0% 100%;         /* foreground on dark surfaces */
+    --cs-ink-on-warm: 0 0% 5.5%;         /* foreground on warm surfaces */
+    --cs-content-max: 1200px;            /* standard text/content width */
+    --cs-gallery-max: 1400px;            /* wider image gallery width */
   }
 
   * {
